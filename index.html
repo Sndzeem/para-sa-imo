@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>i did my best alr😭🙏</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    overflow: hidden;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 20px;
+    max-width: 450px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    position: relative;
+  }
+
+  .image-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .image-row img {
+    width: 48%;
+    border-radius: 15px;
+  }
+
+  h1 {
+    color: #ff4d6d;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+  }
+
+  /* Flex container for buttons */
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    position: relative;
+    height: 60px; /* enough for buttons to jump */
+  }
+
+  button {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.2s;
+    width: 40%;
+    position: relative; /* remove absolute */
+  }
+
+  #yes {
+    background: #ff4d6d;
+    color: white;
+  }
+
+  #no {
+    background: #ccc;
+    color: #333;
+  }
+
+  #yes:hover {
+    transform: scale(1.05);
+  }
+
+  .message {
+    margin-top: 20px;
+    color: #ff4d6d;
+    font-size: 18px;
+    display: none;
+  }
+
+  .heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 24px;
+    animation: floatUp 4s linear forwards;
+    text-shadow: 0 0 3px #fff, 0 0 5px #fff;
+  }
+
+  @keyframes floatUp {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-100vh); opacity: 0; }
+  }
+
+  @media(max-width: 480px){
+    .image-row img { width: 45%; }
+    button { font-size: 14px; padding: 10px 16px; }
+    h1 { font-size: 1.2rem; }
+  }
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" loop preload="auto">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+  <div class="image-row">
+    <img src="photo1.jpg" alt="Photo 1">
+    <img src="photo2.jpg" alt="Photo 2">
+  </div>
+
+  <h1>HII, <span id="crushName">Jovekay</span>, will you be my Valentine😭🙏💕</h1>
+
+  <div class="buttons">
+    <button id="yes">YES 💖</button>
+    <button id="no">NO 😭</button>
+  </div>
+
+  <div class="message" id="message">
+    Haluhh HAHAHHAHAH thanks bai Tanginamelz😭✌️💗💘  </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const message = document.getElementById("message");
+const bgMusic = document.getElementById("bgMusic");
+const crushName = document.getElementById("crushName");
+
+// Set crush name
+crushName.textContent = "Jovekay";
+
+// Try autoplay muted first (mobile-safe)
+bgMusic.muted = true;
+bgMusic.play().catch(()=>{ console.log("Autoplay blocked"); });
+
+// YES click
+yesBtn.addEventListener("click", () => {
+  bgMusic.muted = false;
+  bgMusic.play();
+  message.style.display = "block";
+});
+
+// NO button dodge inside the card only
+function moveButton(){
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
+  const yesRect = yesBtn.getBoundingClientRect();
+  const cardRect = document.querySelector('.card').getBoundingClientRect();
+
+  const maxX = cardRect.width - btnWidth;
+  const maxY = cardRect.height - btnHeight - 60; // prevent overlap with bottom
+
+  let x, y, overlap;
+  do {
+    x = Math.random() * maxX;
+    y = Math.random() * maxY;
+
+    const noRect = {
+      left: cardRect.left + x,
+      right: cardRect.left + x + btnWidth,
+      top: cardRect.top + y,
+      bottom: cardRect.top + y + btnHeight
+    };
+
+    overlap = !(
+      noRect.right < yesRect.left ||
+      noRect.left > yesRect.right ||
+      noRect.bottom < yesRect.top ||
+      noRect.top > yesRect.bottom
+    );
+  } while(overlap);
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+  noBtn.style.transform = "rotate(" + (Math.random()*30-15) + "deg)";
+}
+
+// Only move NO on hover or click
+noBtn.addEventListener("mouseover", moveButton);
+noBtn.addEventListener("touchstart", moveButton);
+noBtn.addEventListener("click", moveButton);
+
+// Hearts floating
+const colors = ["#ff4d6d","#ffb6c1","#ff69b4","#ff85a2","#ff7eb9"];
+function createHeart(){
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "💖";
+  heart.style.left = Math.random()*100 + "vw";
+  heart.style.color = colors[Math.floor(Math.random()*colors.length)];
+  heart.style.fontSize = (16+Math.random()*20) + "px";
+  heart.style.textShadow = `0 0 ${Math.random()*5}px #fff, 0 0 ${Math.random()*5}px #fff`;
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),4000);
+}
+setInterval(createHeart,400);
+</script>
+
+</body>
+</html>
